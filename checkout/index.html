@@ -1,49 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-
- 
 body{
  margin:0;
  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;
+ background:#f5f5f5;
 }
 
 .container{
  max-width:390px;
  margin:auto;
- padding-bottom:140px;
+ padding-bottom:180px;
 }
 
 .header{
  padding:16px;
- font-weight:600;
- border-bottom:1px solid #eee;
+ font-weight:700;
+ font-size:20px;
+ background:white;
 }
 
-.product{
+.card{
+ background:white;
+ margin:12px;
  padding:16px;
- border-bottom:1px solid #eee;
+ border-radius:16px;
 }
 
-.edit{
- margin-top:8px;
- color:#777;
+.item{
+ display:flex;
+ gap:12px;
+ align-items:flex-start;
+ margin-bottom:12px;
+}
+
+.checkbox{
+ width:22px;
+ height:22px;
  cursor:pointer;
 }
 
-.qty{
- margin-top:10px;
+.price-old{
+ text-decoration:line-through;
+ color:#aaa;
+ font-size:14px;
 }
 
-.qty button{
- width:30px;
- height:30px;
+.price-new{
+ font-weight:700;
+ font-size:18px;
 }
 
-.summary{
+.child{
+ margin-left:34px;
+ font-size:14px;
+ color:#666;
+ margin-top:6px;
+}
+
+.summary-box{
+ background:white;
+ margin:12px;
+ padding:16px;
+ border-radius:16px;
+}
+
+.summary-row{
+ display:flex;
+ justify-content:space-between;
+ margin-bottom:6px;
+}
+
+.fixed{
  position:fixed;
  bottom:0;
  left:0;
@@ -56,33 +87,12 @@ body{
 }
 
 .cta{
- background:black;
+ background:#8DB36B;
  color:white;
- padding:14px;
  text-align:center;
-}
-
-.sheet{
- position:fixed;
- bottom:-100%;
- left:0;
- right:0;
- max-width:390px;
- margin:auto;
- background:white;
- padding:20px;
- transition:0.3s;
- border-radius:16px 16px 0 0;
-}
-
-.sheet.active{
- bottom:0;
-}
-
-.option{
- padding:12px 0;
- border-bottom:1px solid #eee;
- cursor:pointer;
+ padding:14px;
+ border-radius:12px;
+ font-weight:600;
 }
 
 </style>
@@ -92,109 +102,132 @@ body{
 
 <div class="container">
 
-<div class="header">Кошик</div>
+<div class="header">КОШИК</div>
 
-<div class="product">
+<div class="card">
 
-<b>Кільце Minimal</b>
-
-<div class="edit" onclick="openSheet('size')">
-Розмір: <span id="sizeLabel">17</span>
+<div class="item">
+<input type="checkbox" class="checkbox" checked onchange="toggleItem(0)">
+<div>
+<div><b>Сережки</b></div>
+<div class="price-old">1 540 грн</div>
+<div class="price-new">1 060 грн</div>
+</div>
 </div>
 
-<div class="edit" onclick="openSheet('engrave')">
-<span id="engraveLabel">Додати гравіювання</span>
-</div>
-
-<div class="edit" onclick="openSheet('pack')">
-<span id="packLabel">Стандартне пакування</span>
-</div>
-
-<div class="qty">
-<button onclick="changeQty(-1)">-</button>
-<span id="qty">1</span>
-<button onclick="changeQty(1)">+</button>
+<div class="child">
+Базове пакування — 1 грн
 </div>
 
 </div>
 
+<div class="card">
+
+<div class="item">
+<input type="checkbox" class="checkbox" checked onchange="toggleItem(1)">
+<div>
+<div><b>Каблучка</b></div>
+<div class="price-old">19 950 грн</div>
+<div class="price-new">13 150 грн</div>
+</div>
 </div>
 
-<div class="summary">
-<div>До сплати: <span id="total">1540</span> грн</div>
-<div class="cta">Оформити</div>
+<div class="child">
+Гравіювання — 350 грн
 </div>
 
-<!-- SIZE -->
-
-<div class="sheet" id="size">
-<h3>Розмір</h3>
-<div class="option" onclick="setSize(16)">16</div>
-<div class="option" onclick="setSize(17)">17</div>
-<div class="option" onclick="setSize(18)">18</div>
+<div class="child">
+Преміум пакування — 0 грн
 </div>
 
-<!-- ENGRAVE -->
-
-<div class="sheet" id="engrave">
-<h3>Гравіювання</h3>
-<input id="engraveInput">
-<button onclick="applyEngrave()">OK</button>
 </div>
 
-<!-- PACK -->
+<div class="summary-box">
+<div class="summary-row">
+<div>Сума без знижки</div>
+<div id="sumOld">21 490 грн</div>
+</div>
 
-<div class="sheet" id="pack">
-<h3>Пакування</h3>
-<div class="option" onclick="setPack('Стандартне',0)">Стандартне</div>
-<div class="option" onclick="setPack('Преміум +350',350)">Преміум</div>
+<div class="summary-row">
+<div>Знижка</div>
+<div id="discount">6 890 грн</div>
+</div>
+
+<div class="summary-row">
+<div>Доставка</div>
+<div id="delivery">80 грн</div>
+</div>
+
+<hr>
+
+<div class="summary-row">
+<b>До сплати</b>
+<b id="total">14 230 грн</b>
+</div>
+
+</div>
+
+</div>
+
+<div class="fixed">
+<div class="summary-row">
+<div class="price-old">21 490 грн</div>
+<div><b id="bottomTotal">14 230 грн</b></div>
+</div>
+<div class="cta">ДО ОФОРМЛЕННЯ</div>
 </div>
 
 <script>
 
-let qty=1
-let basePrice=1540
-let packPrice=0
+const items = [
+ {
+  old:1540,
+  new:1060,
+  children:1
+ },
+ {
+  old:19950,
+  new:13150,
+  children:350
+ }
+]
+
+let selected = [true,true]
+
+function format(n){
+ return n.toLocaleString('uk-UA')
+}
+
+function toggleItem(i){
+ selected[i] = !selected[i]
+ recalc()
+}
 
 function recalc(){
- document.getElementById('total').innerText=(basePrice+packPrice)*qty
+
+ let sumOld = 0
+ let sumNew = 0
+
+ items.forEach((item,i)=>{
+  if(selected[i]){
+   sumOld += item.old
+   sumNew += item.new + item.children
+  }
+ })
+
+ let discount = sumOld - sumNew
+ let delivery = sumNew > 0 ? 80 : 0
+ let total = sumNew + delivery
+
+ document.getElementById('sumOld').innerText = format(sumOld)+' грн'
+ document.getElementById('discount').innerText = format(discount)+' грн'
+ document.getElementById('delivery').innerText = format(delivery)+' грн'
+ document.getElementById('total').innerText = format(total)+' грн'
+ document.getElementById('bottomTotal').innerText = format(total)+' грн'
+
 }
 
-function changeQty(v){
- qty+=v
- if(qty<1)qty=1
- document.getElementById('qty').innerText=qty
- recalc()
-}
-
-function openSheet(id){
- document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('active'))
- document.getElementById(id).classList.add('active')
-}
-
-function setSize(s){
- document.getElementById('sizeLabel').innerText=s
- closeSheets()
-}
-
-function applyEngrave(){
- let val=document.getElementById('engraveInput').value
- if(val){
- document.getElementById('engraveLabel').innerText='Гравіювання: '+val
- }
- closeSheets()
-}
-
-function setPack(name,price){
- packPrice=price
- document.getElementById('packLabel').innerText=name
- recalc()
- closeSheets()
-}
-
-function closeSheets(){
- document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('active'))
-}
+recalc()
 
 </script>
 
